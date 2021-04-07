@@ -1,0 +1,33 @@
+                                  Laboratório 1
+                   Introdução à programação com sockets
+                           Sistemas Distribuı́dos (MAB-367)
+                                 Prof. Silvana Rossetto
+                                     1
+                                         DCC/IM/UFRJ
+
+Introdução
+O objetivo deste Laboratório é introduzir a programação com sockets usando a lingua-
+gem Python.
+        O módulo socket de Python provê acesso à interface Socket POSIX. A função
+socket() retorna um objeto cujos métodos implementam as chamadas de sistema de
+socket.
+
+Atividade 1
+Objetivo: Desenvolver uma aplicação distribuı́da básica usando o modelo de interação
+requisição/resposta (ou modo ativo/passivo).
+
+Roteiro: A aplicação será um “servidor de echo”, que envia de volta para o emissor a
+mesma mensagem recebida.
+    1. Implemente o lado passivo que coloca-se em modo de espera por conexões, re-
+       cebe a mensagem do lado passivo e a envia de volta, e repete esse procedimento
+       até que o lado ativo encerre a conexão.
+    2. Implemente o lado ativo que conecta-se com o servidor de echo, envia uma men-
+       sagem digitada pelo usuário, aguarda e imprime a mensagem recebida de volta.
+    3. Defina um código para o usuário indicar que não deseja mais enviar mensagens
+       para o servidor de echo. Quando esse código for digitado pelo usuário, a aplicação
+       deverá ser encerrada.
+
+Disponibilize seu código Disponibilize o código da sua aplicação em um ambiente de
+acesso remoto (GitHub ou GitLab) e use o formulário de entrega do laboratório para
+encaminhar as informações solicitadas.
+
