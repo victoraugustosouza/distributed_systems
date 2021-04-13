@@ -1,0 +1,86 @@
+                                   Laboratório 2
+                        Aplicação cliente/servidor básica
+                            Sistemas Distribuı́dos (MAB-367)
+                                 Profa. Silvana Rossetto
+                                      1
+                                          DCC/IM/UFRJ
+
+Introdução
+O objetivo deste Laboratório é desenvolver uma aplicação distribuı́da básica para aplicar
+os conceitos estudados sobre arquitetura de software em camada e arquitetura de
+sistema centralizada (cliente/servidor); e seguir praticando com a programação usando
+sockets.
+       A aplicação que vamos desenvolver consiste em contar as ocorrências das pala-
+vras em um arquivo texto.
+     • Entrada: usuário informa o nome do arquivo texto.
+     • Saı́da (com sucesso): a aplicação exibe a lista das 10 palavras mais encontradas
+       no arquivo, ordenadas da mais frequente para a menos frequente, e o número de
+       ocorrências de cada palavra.
+     • Saı́da (com erro): informa que o arquivo solicitado não foi encontrado.
+        Nas atividades 1 e 2, já temos os projetos de arquitetura de software e arquitetura
+de sistema pré-concebidos, faltando apenas fazer os refinamentos solicitados.
+
+Atividade 1
+Objetivo: Refinar a arquitetura de software — usando o estilo arquitetural em cama-
+das — apresentada abaixo.
+
+Camadas:
+    1. Funcionalidades da camada de interface com o usuário: recebe do usuário o
+       nome do arquivo de busca e exibe na tela o resultado do processamento. O re-
+       sultado do processamento poderá ser: (i) uma mensagem de erro indicando que o
+       arquivo não foi encontrado; ou (ii) a lista de palavras com suas ocorrências. Re-
+       finar: decidir se a lista de palavras virá pronta para exibição ou se será organizada
+       nessa camada.
+    2. Funcionalidades da camada de processamento: solicita o acesso ao arquivo
+       texto. Se o arquivo for válido, realiza a contagem das palavras e prepara a resposta
+       para ser devolvida para a camada de interface. Se o arquivo for inválido, responde
+       com a mensagem de erro. Refinar: decidir como entregará a lista de palavras para
+       a camada de interface.
+    3. Funcionalidades da camada de acesso aos dados: verifica se o arquivo existe
+       em sua base. Se sim, devolve o seu conteúdo inteiro. Caso contrário, envia uma
+       mensagem de erro.
+
+Tarefa: Em um arquivo PDF, repita as funcionalidades descritas para cada camada,
+substituindo as partes em vermelho pelas decisões tomadas.
+Atividade 2
+Objetivo: Refinar a proposta de instanciação da arquitetura de software da aplicação
+definida na Atividade 1 para uma arquitetura de sistema cliente/servidor de dois nı́veis,
+com um servidor e um cliente, apresentada abaixo.
+
+Proposta de arquitetura de sistema:
+    1. Lado cliente: implementa a camada de interface com o usuário. O usuário
+       poderá solicitar o processamento de um ou mais arquivos em uma única execução
+       da aplicação: o programa espera pelo nome do arquivo, faz o processamento,
+       retorna o resultado, e então aguarda um novo pedido de arquivo ou o comando de
+       finalização.
+    2. Lado servidor: implementa a camada de processamento e a camada de acesso
+       aos dados. Implemente um servidor iterativo, isto é, que trata as requisiçoes
+       de um cliente de cada vez, em um único fluxo de execução (estudaremos essa
+       classificação depois). Terminada a interação com um cliente, ele poderá voltar
+       a esperar por nova conexão. Dessa forma, o programa do servidor fica em loop
+       infinito (depois veremos como lidar com isso).
+
+Refinar:
+    1. Definir as estruturas de dados que serão usadas e o conteúdo das mensagens que
+       serão trocadas entre cliente e servidor;
+    2. Especificar a sequência de mensagens que serão trocadas entre cliente e servidor,
+       considerando um comportamento requisição/resposta;
+    3. Detalhar outras decisões de implementação do lado do cliente e do lado do servi-
+       dor.
+
+Tarefa: No arquivo PDF, repita as funcionalidades descritas para o lado cliente e o lado
+servidor, complementando as definições solicitadas em vermelho.
+
+Atividade 3
+Objetivo: Implementar e avaliar a aplicação distribuı́da proposta, seguindo as definições
+da Atividade 2.
+
+Roteiro:
+    1. Implemente o código do lado cliente e do lado servidor;
+    2. Documente o código de forma concisa e clara;
+    3. Experimente a aplicação usando diferentes arquivos de entrada.
+
+Disponibilize seu código Disponibilize o arquivo PDF e o código da sua aplicação
+em um ambiente de acesso remoto (GitHub ou GitLab), e use o formulário de entrega
+desse laboratório para passar as informações solicitadas.
+
