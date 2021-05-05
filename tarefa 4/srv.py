@@ -25,10 +25,12 @@ class Echo(rpyc.Service):
 		self.thread.join()
 		dicionario.pop(self.name)
 		lista_user.remove(self.name)
+		for i in range (0, len(lista_user)):
+			dicionario[lista_user[i]].append("\nUsuário " + self.name + " saiu do chat.")
 
 	# executa quando uma conexao eh fechada
 	def on_disconnect(self, conn):
-		print("Conexao finalizada:")
+		print("\nConexao com " + self.name + " finalizada")
 
 	# imprime e ecoa a mensagem recebida
 	def exposed_echo(self, msg):
@@ -65,14 +67,56 @@ class Echo(rpyc.Service):
 		return msg  
 
 	def exposed_send(self,msg):
-		temp = msg.split()[0].strip()
-		if temp in dicionario.keys():
-			msg = msg[len(temp):]
-			dicionario[temp].append(self.name + ":" + msg)
-			print(dicionario[temp])
-			return
+
+		temp_lista = msg.split()
+		temp = []
+		verifica_usuarios = []
+		tamanho_string_usuario = 0
+
+		if temp_lista[0][0] != '@':
+			return "Comando inválido\nTente digitar @NomeDoUsuario mensagem sem espaços antes do @"
 		else:
-			return "Usuário não encontrado"
+			for i in range (0, len(temp_lista)):
+				if temp_lista[i][0] == "@":
+					temp.append(temp_lista[i][1:].strip())
+				else:
+					break
+		
+		for i in range(0, len(temp)):
+			if temp[i] not in lista_user:
+				verifica_usuarios.append(temp[i])
+			else:
+				tamanho_string_usuario += (len(temp[i]) + 2)
+
+		if len(verifica_usuarios) > 0:
+			if len(verifica_usuarios) == 1:
+				msg = "\nUsuário : \n"
+			else:
+				msg = "\nUsuários : \n"
+			for i in range(0, len(verifica_usuarios)):
+				msg += verifica_usuarios[i] + "\n"
+			
+			if len(verifica_usuarios) == 1:
+				msg += "Não está no chat \n"
+			else:
+				msg += "Não estão no chat \n"
+
+			return msg
+
+		msg = msg[tamanho_string_usuario:]
+
+		for i in range (0, len(temp)):
+			if temp[i] in dicionario.keys():
+				dicionario[temp[i]].append(self.name + " : " + msg)
+			
+		return
+
+		# if temp in dicionario.keys():
+		# 	msg = msg[len(temp):]
+		# 	dicionario[temp].append(self.name + ":" + msg)
+		# 	return
+		# else:
+		# 	return "Usuário não encontrado"
 
 
 	def work(self):
