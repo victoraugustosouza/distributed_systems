@@ -8,7 +8,7 @@ from rpyc.utils.server import ForkingServer,ThreadedServer
 from threading import Thread
 
 # porta de escuta do servidor de echo
-PORTA = 10001
+PORTA = 10004
 lista_user = []
 dicionario = {}
 
@@ -23,6 +23,8 @@ class Echo(rpyc.Service):
 	def exposed_stop(self):   # this method has to be exposed too
 		self.active = False
 		self.thread.join()
+		dicionario.pop(self.name)
+		lista_user.remove(self.name)
 
 	# executa quando uma conexao eh fechada
 	def on_disconnect(self, conn):
@@ -34,20 +36,21 @@ class Echo(rpyc.Service):
 		return msg
 
 	def exposed_login(self, msg,callback):
-		self.callback = rpyc.async_(callback)   # create an async callback
+
 		self.name=msg
-		dicionario[msg]=list()
-		self.active = True
-		self.thread = Thread(target = self.work)
-		self.thread.start()
 
 		if msg in lista_user:
+			print("Usuário " + str(msg) + " já cadastrado.")
 			msg="Erro"
 		else:
-			self.name=msg
+			self.callback = rpyc.async_(callback)   # create an async callback
+			dicionario[msg]=list()
+			self.active = True
+			self.thread = Thread(target = self.work)
+			self.thread.start()
 			lista_user.append(msg)
 			msg="Cadastro Realizado com Sucesso"
-		print(lista_user)
+			print(lista_user)
 
 		return msg
 
@@ -62,9 +65,11 @@ class Echo(rpyc.Service):
 		return msg  
 
 	def exposed_send(self,msg):
-		temp = msg.split()[0]
+		temp = msg.split()[0].strip()
 		if temp in dicionario.keys():
-			dicionario[temp]=dicionario[temp].append(msg)
+			msg = msg[len(temp):]
+			dicionario[temp].append(self.name + ":" + msg)
+			print(dicionario[temp])
 			return
 		else:
 			return "Usuário não encontrado"

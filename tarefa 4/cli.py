@@ -5,7 +5,7 @@ import rpyc #modulo que oferece suporte a abstracao de RPC
 
 # endereco do servidor de echo
 SERVIDOR = 'localhost'
-PORTA = 10001
+PORTA = 10004
 
 def iniciaConexao():
 	'''Conecta-se ao servidor.
@@ -23,9 +23,14 @@ def login(conn):
     ret = conn.root.exposed_login(msg,printt)
     while ret=='Erro':
         print("Nome já cadastrado\n")
-        msg=input("Entre com o seu nome de usuário, sem espaços")
-        ret = conn.root.exposed_login(msg)
+        msg=input("Entre com o seu nome de usuário, sem espaços: ")
+        ret = conn.root.exposed_login(msg, printt)
     print("\n"+ret+"\n")
+
+def logout(conn, bgsrv):
+	ret = conn.root.exposed_stop()
+	bgsrv.stop()
+	conn.close()
 
 def listar_comandos(conn):
 	print(conn.root.exposed_listar_comandos())
@@ -33,13 +38,15 @@ def listar_comandos(conn):
 def listar_usuarios(conn):
 	print(conn.root.exposed_listar_user())
 
-def fazRequisicoes(conn):
+def fazRequisicoes(conn, bgsrv):
 	'''Faz requisicoes ao servidor e exibe o resultado.
 	Entrada: conexao estabelecida com o servidor'''
 	# le as mensagens do usuario ate ele digitar 'fim'
 	while True: 
 		msg = input("Digite uma mensagem ou um comando('fim' para terminar):")
-		if msg == '@fim': break 
+		if msg == '@fim': 
+			logout(conn, bgsrv)
+			break
 		if msg == '@help': 		
 			listar_comandos(conn)
 		if msg == '@listar':
@@ -55,9 +62,9 @@ def fazRequisicoes(conn):
 		#print(ret)
 
 	# encerra a conexao
-	conn.root.exposed_stop()
-	bgsrv.stop()
-	conn.close()
+	# conn.root.exposed_stop()
+	# bgsrv.stop()
+	# conn.close()
 	
 
 def main():
@@ -66,7 +73,7 @@ def main():
 	login(conn)
 	listar_comandos(conn)
 	#interage com o servidor ate encerrar
-	fazRequisicoes(conn)
+	fazRequisicoes(conn,bgsrv)
 
 # executa o cliente
 if __name__ == "__main__":
