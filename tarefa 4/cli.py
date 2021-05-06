@@ -20,18 +20,18 @@ def printt(texto):
 	print(texto)
 
 def login(conn):
-	''' Executa login do usuário no servidor. '''
+        ''' Executa login do usuário no servidor. '''
     
-	msg=input("Entre com o seu nome de usuário, sem espaços: ")
+        msg=input("Entre com o seu nome de usuário, sem espaços: ")
     
 	#chama a função de login no servidor, passa a função de callback e o nome do usuário
-	ret = conn.root.exposed_login(msg,printt)
+        ret = conn.root.exposed_login(msg,printt)
 
-    while ret=='Erro': #garante que não haverá cadastro se houver nome repetido. A verificação é no servidor.
-        print("Nome já cadastrado\n")
-        msg=input("Entre com o seu nome de usuário, sem espaços: ")
-        ret = conn.root.exposed_login(msg, printt)
-    print("\n"+ret+"\n")
+        while ret=='Erro': #garante que não haverá cadastro se houver nome repetido. A verificação é no servidor.
+            print("Nome já cadastrado\n")
+            msg=input("Entre com o seu nome de usuário, sem espaços: ")
+            ret = conn.root.exposed_login(msg, printt)
+        print("\n"+ret+"\n")
 
 def logout(conn, bgsrv):
 	'''Executar o logout do usuário'''
