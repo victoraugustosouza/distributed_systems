@@ -43,13 +43,13 @@ def fazRequisicoes(conn, bgsrv):
 	Entrada: conexao estabelecida com o servidor'''
 	# le as mensagens do usuario ate ele digitar 'fim'
 	while True: 
-		msg = input("Digite uma mensagem ou um comando('fim' para terminar):")
+		msg = input("Digite uma mensagem ou um comando:")
 		if msg == '@fim': 
 			logout(conn, bgsrv)
 			break
-		if msg == '@help': 		
+		elif msg == '@help': 		
 			listar_comandos(conn)
-		if msg == '@listar':
+		elif msg == '@listar':
 			listar_usuarios(conn)
 		else:
 			ret = conn.root.exposed_send(msg)	
